@@ -152,7 +152,7 @@ func TestPartitionMustAddRowsConcurrent(t *testing.T) {
 	const workersCount = 3
 	var totalRowsCount atomic.Uint64
 	doneCh := make(chan struct{}, workersCount)
-	for i := 0; i < cap(doneCh); i++ {
+	for range cap(doneCh) {
 		go func() {
 			for j := range 7 {
 				lr := newTestLogRows(5, 10, int64(j))
@@ -164,7 +164,7 @@ func TestPartitionMustAddRowsConcurrent(t *testing.T) {
 	}
 	timer := timerpool.Get(time.Second)
 	defer timerpool.Put(timer)
-	for i := 0; i < cap(doneCh); i++ {
+	for range cap(doneCh) {
 		select {
 		case <-doneCh:
 		case <-timer.C:

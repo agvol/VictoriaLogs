@@ -235,7 +235,7 @@ var (
 
 func (ddb *datadb) startSmallPartsMergers() {
 	ddb.partsLock.Lock()
-	for i := 0; i < cap(smallPartsConcurrencyCh); i++ {
+	for range cap(smallPartsConcurrencyCh) {
 		ddb.startSmallPartsMergerLocked()
 	}
 	ddb.partsLock.Unlock()
@@ -243,7 +243,7 @@ func (ddb *datadb) startSmallPartsMergers() {
 
 func (ddb *datadb) startBigPartsMergers() {
 	ddb.partsLock.Lock()
-	for i := 0; i < cap(bigPartsConcurrencyCh); i++ {
+	for range cap(bigPartsConcurrencyCh) {
 		ddb.startBigPartsMergerLocked()
 	}
 	ddb.partsLock.Unlock()
@@ -1384,7 +1384,7 @@ func appendPartsToMerge(dst, src []*partWrapper, maxOutBytes uint64) []*partWrap
 	var pws []*partWrapper
 	maxM := float64(0)
 	for i := minSrcParts; i <= maxSrcParts; i++ {
-		for j := 0; j <= len(src)-i; j++ {
+		for j := range len(src) - i + 1 {
 			a := src[j : j+i]
 			if a[0].p.ph.CompressedSizeBytes*uint64(len(a)) < a[len(a)-1].p.ph.CompressedSizeBytes {
 				// Do not merge parts with too big difference in size,

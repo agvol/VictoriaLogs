@@ -566,7 +566,7 @@ func tryParseUint64(s string) (uint64, bool) {
 	}
 
 	n := uint64(0)
-	for i := 0; i < len(s); i++ {
+	for i := range len(s) {
 		ch := s[i]
 		if ch == '_' {
 			continue
@@ -606,7 +606,7 @@ func tryParseDateUint64(s string) (uint64, bool) {
 	}
 
 	n := uint64(0)
-	for i := 0; i < len(s); i++ {
+	for i := range len(s) {
 		ch := s[i]
 		if ch < '0' || ch > '9' {
 			return 0, false

@@ -96,7 +96,7 @@ func (pdp *pipeDropEmptyFieldsProcessor) writeBlock(workerID uint, br *blockResu
 	shard.wctx.init(workerID, pdp.ppNext)
 
 	fields := shard.fields
-	for rowIdx := 0; rowIdx < br.rowsLen; rowIdx++ {
+	for rowIdx := range br.rowsLen {
 		fields = fields[:0]
 		for i, values := range columnValues {
 			v := values[rowIdx]

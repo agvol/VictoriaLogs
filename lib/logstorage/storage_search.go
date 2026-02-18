@@ -378,7 +378,7 @@ func getJoinMapGeneric(qctx *QueryContext, runQuery runQueryFunc, byFields []str
 		byValues := make([]string, len(byFields))
 		var tmpBuf []byte
 
-		for rowIdx := 0; rowIdx < br.rowsLen; rowIdx++ {
+		for rowIdx := range br.rowsLen {
 			fields := make([]Field, 0, len(cs))
 			clear(byValues)
 			for j := range cs {

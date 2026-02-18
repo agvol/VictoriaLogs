@@ -47,7 +47,7 @@ func (shp *statsHistogramProcessor) updateStatsForAllRows(sf statsFunc, br *bloc
 		v := c.valuesEncoded[0]
 		f, ok := tryParseNumber(v)
 		if ok {
-			for rowIdx := 0; rowIdx < br.rowsLen; rowIdx++ {
+			for range br.rowsLen {
 				shp.h.Update(f)
 			}
 		}

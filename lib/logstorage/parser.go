@@ -1474,7 +1474,7 @@ func optimizeOffsetLimitPipesInternal(pipes []pipe) []pipe {
 	// Replace '| offset X | limit Y' with '| limit X+Y | offset X'.
 	// This reduces the number of rows processed by remote storage.
 	// See: https://github.com/VictoriaMetrics/VictoriaLogs/issues/620#issuecomment-3276624504
-	for i := 0; i < len(pipes)-1; i++ {
+	for i := range len(pipes) - 1 {
 		po, ok := pipes[i].(*pipeOffset)
 		if !ok {
 			continue
@@ -3641,7 +3641,7 @@ func isAllDigits(s string) bool {
 	if len(s) == 0 {
 		return false
 	}
-	for i := 0; i < len(s); i++ {
+	for i := range len(s) {
 		if s[i] < '0' || s[i] > '9' {
 			return false
 		}

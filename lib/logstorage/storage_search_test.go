@@ -638,7 +638,7 @@ func TestStorageRunQuery(t *testing.T) {
 				return
 			}
 
-			for i := 0; i < len(columns[0].Values); i++ {
+			for i := range len(columns[0].Values) {
 				row := make([]Field, len(columns))
 				for j, bc := range columns {
 					row[j] = Field{
