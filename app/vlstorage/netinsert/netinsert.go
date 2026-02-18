@@ -290,7 +290,7 @@ func (sn *storageNode) doRequest(path string, body io.Reader) error {
 
 	respBody, err := io.ReadAll(resp.Body)
 	if err != nil {
-		respBody = []byte(fmt.Sprintf("%s", err))
+		respBody = fmt.Appendf(nil, "%s", err)
 	}
 
 	sn.setDisableTemporarily()
