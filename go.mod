@@ -2,7 +2,7 @@ module github.com/VictoriaMetrics/VictoriaLogs
 
 go 1.26.0
 
-replace github.com/VictoriaMetrics/VictoriaMetrics => github.com/VictoriaMetrics/VictoriaMetrics v1.136.1-0.20260218193952-0b8205ef46d9
+replace github.com/VictoriaMetrics/VictoriaMetrics => github.com/VictoriaMetrics/VictoriaMetrics v1.136.1-0.20260221122045-6d8ddcb9ed50
 
 require (
 	github.com/VictoriaMetrics/VictoriaMetrics v1.135.0
