@@ -1093,13 +1093,13 @@ See also:
 ### json_array_contains_any filter
 
 [Log fields](https://docs.victoriametrics.com/victorialogs/keyconcepts/#data-model) may contain JSON arrays. For example, `tags=["prod","canary"]`.
-This is common for JSON-encoded logs. LogsQL provides `json_array_contains_any("v1",...,"vN")` filter for matching such fields by the presence of the given `v1`, ..., `v1`
-values in the JSON array.
+This is common for JSON-encoded logs. LogsQL provides `json_array_contains_any("v1",...,"vN")` filter for matching such fields by the presence
+of at least one of the given `v1`, ..., `v1` values in the JSON array.
 
-For example, the following query selects logs, which have the `prod` value inside the JSON array stored at `tags` field:
+For example, the following query selects logs, which have the `prod` or `dev` values inside the JSON array stored at `tags` field:
 
 ```logsql
-tags:json_array_contains_any("prod")
+tags:json_array_contains_any("prod","dev")
 ```
 
 The `json_array_contains_any` filter supports the following value types in the JSON array:
