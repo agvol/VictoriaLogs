@@ -235,7 +235,7 @@ To enable TLS and authentication, follow the instructions below.
 
 ### TLS for remote write
 
-To send logs to VictoriaLogs over HTTPS, simply use `https://` in `-remoteWrite.url`. 
+To send logs to VictoriaLogs over HTTPS, simply use `https://` in `-remoteWrite.url`.
 Additional flags control certificate verification:
 
 ```sh
@@ -276,6 +276,9 @@ when log collectors send logs to `vlagent` over the network - pass the following
   -tlsKeyFile=/etc/vlagent/server.key
 ```
 
+It is recommended using [vmauth](https://docs.victoriametrics.com/victoriametrics/vmauth/) in front of `vlagent`
+as TLS termination proxy according to [these docs](https://docs.victoriametrics.com/victoriametrics/vmauth/#tls-termination-proxy).
+
 ### Basic authentication
 
 `vlagent` supports HTTP Basic Auth both for incoming requests and for outgoing remote write connections.
@@ -306,6 +309,9 @@ Passwords can also be read from a file to avoid exposing them in the process lis
 
 The provided password is automatically reloaded when the file changes.
 
+It is recommended to use [vmauth](https://docs.victoriametrics.com/victoriametrics/vmauth/) for authentication and authorization
+according to [these docs](https://docs.victoriametrics.com/victoriametrics/vmauth/#basic-auth-proxy).
+
 ### Bearer token authentication
 
 ```sh
@@ -322,11 +328,14 @@ Or from a file:
 
 The provided Bearer token is automatically reloaded when the file changes.
 
+It is recommended to use [vmauth](https://docs.victoriametrics.com/victoriametrics/vmauth/) for authentication and authorization
+according to [these docs](https://docs.victoriametrics.com/victoriametrics/vmauth/#bearer-token-auth-proxy).
+
 ### Security recommendations for Kubernetes
 
-- Store TLS certificates and auth credentials in [Kubernetes Secrets](https://kubernetes.io/docs/concepts/configuration/secret/), 
+- Store TLS certificates and auth credentials in [Kubernetes Secrets](https://kubernetes.io/docs/concepts/configuration/secret/),
   not in ConfigMaps or environment variables.
-- Mount secrets as files and reference them via `*File` flags (`-remoteWrite.bearerTokenFile`, `-remoteWrite.basicAuth.passwordFile`, etc.) 
+- Mount secrets as files and reference them via `*File` flags (`-remoteWrite.bearerTokenFile`, `-remoteWrite.basicAuth.passwordFile`, etc.)
   rather than passing values directly as flag arguments.
 - Use `-remoteWrite.showURL=false` (the default) to prevent sensitive URL parameters such as tokens or passwords
   from appearing in logs and on the debug endpoints like `/metrics` and `/debug/pprof/*`
