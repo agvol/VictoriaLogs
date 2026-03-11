@@ -2,7 +2,6 @@ import { useState, useCallback, useEffect, useRef } from "preact/hooks";
 import { useAppState } from "../../../state/common/StateContext";
 import { LogsFieldValues } from "../../../api/types";
 import { useTenant } from "../../../hooks/useTenant";
-import { stripPipes } from "../../../components/Configurators/QueryEditor/LogsQL/parser";
 
 interface FetchOptions {
   start: number;
@@ -31,15 +30,12 @@ export const useFetchStreamValues = () => {
     abortRef.current = new AbortController();
     const { signal } = abortRef.current;
 
-    // TODO: remove when backend supports `ignore_pipes`.
-    // Temporarily drop everything after the first `|`.
-    // See: https://github.com/VictoriaMetrics/VictoriaLogs/issues/1156
-    // See also: useFetchStreamFieldNames for the same logic.
-    const query = stripPipes(options.query || "*");
+    const query = options.query || "*";
 
     const params = new URLSearchParams({
       start: options.start.toString(),
       end: options.end.toString(),
+      ignore_pipes: "1",
       query,
       field: options.field,
     });

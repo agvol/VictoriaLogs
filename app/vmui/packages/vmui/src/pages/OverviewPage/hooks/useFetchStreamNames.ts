@@ -6,7 +6,6 @@ import {
   useOverviewState
 } from "../../../state/overview/OverviewStateContext";
 import { useTenant } from "../../../hooks/useTenant";
-import { stripPipes } from "../../../components/Configurators/QueryEditor/LogsQL/parser";
 
 interface FetchOptions {
   start: number;
@@ -38,16 +37,13 @@ export const useFetchStreamFieldNames = () => {
     setLoading(true);
     setError("");
 
-    // TODO: remove when backend supports `ignore_pipes`.
-    // Temporarily drop everything after the first `|`.
-    // See: https://github.com/VictoriaMetrics/VictoriaLogs/issues/1156
-    // See also: useFetchStreamValues for the same logic.
-    const query = stripPipes(options.query || "*");
+    const query = options.query || "*";
 
     try {
       const params = new URLSearchParams({
         start: options.start.toString(),
         end: options.end.toString(),
+        ignore_pipes: "1",
         query,
       });
       options.extraParams?.forEach((v, k) => params.append(k, v));
