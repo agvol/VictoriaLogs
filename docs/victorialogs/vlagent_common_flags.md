@@ -136,6 +136,10 @@ See the docs at https://docs.victoriametrics.com/victorialogs/vlagent/ .
      Fields to ignore across logs ingested from Kubernetes
      Supports an array of values separated by comma or specified via multiple flags.
      Each array item can contain comma inside single-quoted or double-quoted string, {}, [] and () braces.
+  -kubernetesCollector.includeNamespaceAnnotations
+     Include Namespace annotations as additional fields in the log entries. Even this setting is disabled, Namespace annotations are available for filtering via -kubernetesCollector.excludeFilter flag
+  -kubernetesCollector.includeNamespaceLabels
+     Include Namespace labels as additional fields in the log entries. Even this setting is disabled, Namespace labels are available for filtering via -kubernetesCollector.excludeFilter flag
   -kubernetesCollector.includeNodeAnnotations
      Include Node annotations as additional fields in the log entries. Even this setting is disabled, Node annotations are available for filtering via -kubernetesCollector.excludeFilter flag
   -kubernetesCollector.includeNodeLabels
