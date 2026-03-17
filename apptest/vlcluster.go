@@ -147,6 +147,19 @@ func (app *Vlcluster) FieldNames(t *testing.T, query string, opts FieldNamesOpts
 	return app.selectNode.cli.PostFormSuccess(t, url, values)
 }
 
+// FieldValues sends HTTP POST request to /select/logsql/field_values endpoint and returns the plain response.
+//
+// See https://docs.victoriametrics.com/victorialogs/querying/#querying-field-values
+func (app *Vlcluster) FieldValues(t *testing.T, query string, opts FieldValuesOpts) string {
+	t.Helper()
+
+	values := opts.asURLValues()
+	values.Add("query", query)
+
+	url := fmt.Sprintf("http://%s/select/logsql/field_values", app.selectNode.httpListenAddr)
+	return app.selectNode.cli.PostFormSuccess(t, url, values)
+}
+
 // String returns the string representation of the app state.
 func (app *Vlcluster) String() string {
 	return "Vlcluster"

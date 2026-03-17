@@ -2226,7 +2226,7 @@ _time:5m | field_names
 ```
 
 It is possible to return only the field names containing the given substring by using `filter "substring"` modifier. For example, the following query
-returns only field names containing `kubernetes` substring across all the logs over the last 5 minutes:
+returns only field names containing the `kubernetes` substring across all the logs over the last 5 minutes:
 
 ```logsql
 _time:5m | field_names filter "kubernetes"
@@ -2248,6 +2248,20 @@ For example, the following query returns all the values with the number of match
 
 ```logsql
 _time:5m | field_values level
+```
+
+It is possible to return only the field values containing the given substring by using `filter "substring"` modifier. For example, the following query
+returns only values containing the `foo` substring for the `host` field across all the logs over the last 5 minutes:
+
+```logsql
+_time:5m | field_values host filter "foo"
+```
+
+This query is equivalent to the following query, which uses [`filter` pipe](https://docs.victoriametrics.com/victorialogs/logsql/#filter-pipe) for filtering
+`host` field values containing the `foo` substring before passing them to `field_values` pipe:
+
+```logsql
+_time:5m | filter host:*foo* | field_values host
 ```
 
 It is possible to limit the number of returned values by adding `limit N` to the end of `field_values ...`. For example, the following query returns

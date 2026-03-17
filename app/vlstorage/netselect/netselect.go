@@ -210,9 +210,10 @@ func (sn *storageNode) getFieldNames(qctx *logstorage.QueryContext, filter strin
 	return sn.getValuesWithHits(qctx, "/internal/select/field_names", args)
 }
 
-func (sn *storageNode) getFieldValues(qctx *logstorage.QueryContext, fieldName string, limit uint64) ([]logstorage.ValueWithHits, error) {
+func (sn *storageNode) getFieldValues(qctx *logstorage.QueryContext, fieldName, filter string, limit uint64) ([]logstorage.ValueWithHits, error) {
 	args := sn.getCommonArgs(FieldValuesProtocolVersion, qctx)
 	args.Set("field", fieldName)
+	args.Set("filter", filter)
 	args.Set("limit", fmt.Sprintf("%d", limit))
 
 	return sn.getValuesWithHits(qctx, "/internal/select/field_values", args)
@@ -432,10 +433,10 @@ func (s *Storage) GetFieldNames(qctx *logstorage.QueryContext, filter string) ([
 // GetFieldValues executes qctx and returns unique values for the fieldName seen in results.
 //
 // If limit > 0, then up to limit unique values are returned.
-func (s *Storage) GetFieldValues(qctx *logstorage.QueryContext, fieldName string, limit uint64) ([]logstorage.ValueWithHits, error) {
+func (s *Storage) GetFieldValues(qctx *logstorage.QueryContext, fieldName, filter string, limit uint64) ([]logstorage.ValueWithHits, error) {
 	return s.getValuesWithHits(qctx, limit, true, func(ctx context.Context, sn *storageNode) ([]logstorage.ValueWithHits, error) {
 		qctxLocal := qctx.WithContext(ctx)
-		return sn.getFieldValues(qctxLocal, fieldName, limit)
+		return sn.getFieldValues(qctxLocal, fieldName, filter, limit)
 	})
 }
 

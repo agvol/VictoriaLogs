@@ -576,12 +576,14 @@ func GetFieldNames(qctx *logstorage.QueryContext, filter string) ([]logstorage.V
 
 // GetFieldValues executes the given qctx and returns unique values for the fieldName seen in results.
 //
+// If the filter isn't empty, then only the field values containing the filter substing are returned.
+//
 // If limit > 0, then up to limit unique values are returned.
-func GetFieldValues(qctx *logstorage.QueryContext, fieldName string, limit uint64) ([]logstorage.ValueWithHits, error) {
+func GetFieldValues(qctx *logstorage.QueryContext, fieldName, filter string, limit uint64) ([]logstorage.ValueWithHits, error) {
 	if localStorage != nil {
-		return localStorage.GetFieldValues(qctx, fieldName, limit)
+		return localStorage.GetFieldValues(qctx, fieldName, filter, limit)
 	}
-	return netstorageSelect.GetFieldValues(qctx, fieldName, limit)
+	return netstorageSelect.GetFieldValues(qctx, fieldName, filter, limit)
 }
 
 // GetStreamFieldNames executes the given qctx and returns stream field names seen in results.

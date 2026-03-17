@@ -486,7 +486,7 @@ func TestStorageRunQuery(t *testing.T) {
 	t.Run("field_values-nolimit", func(t *testing.T) {
 		q := mustParseQuery("*")
 		qctx := newTestQueryContext(allTenantIDs, q)
-		results, err := s.GetFieldValues(qctx, "_stream", 0)
+		results, err := s.GetFieldValues(qctx, "_stream", "", 0)
 		if err != nil {
 			t.Fatalf("unexpected error: %s", err)
 		}
@@ -500,10 +500,25 @@ func TestStorageRunQuery(t *testing.T) {
 			t.Fatalf("unexpected result; got\n%v\nwant\n%v", results, resultsExpected)
 		}
 	})
-	t.Run("field_values-limit", func(t *testing.T) {
+	t.Run("field_values-with-filter", func(t *testing.T) {
 		q := mustParseQuery("*")
 		qctx := newTestQueryContext(allTenantIDs, q)
-		results, err := s.GetFieldValues(qctx, "_stream", 3)
+		results, err := s.GetFieldValues(qctx, "_stream", "1:23", 0)
+		if err != nil {
+			t.Fatalf("unexpected error: %s", err)
+		}
+
+		resultsExpected := []ValueWithHits{
+			{`{instance="host-1:234",job="foobar"}`, 385},
+		}
+		if !reflect.DeepEqual(results, resultsExpected) {
+			t.Fatalf("unexpected result; got\n%v\nwant\n%v", results, resultsExpected)
+		}
+	})
+	t.Run("field_values-limit-reached", func(t *testing.T) {
+		q := mustParseQuery("*")
+		qctx := newTestQueryContext(allTenantIDs, q)
+		results, err := s.GetFieldValues(qctx, "_stream", "", 3)
 		if err != nil {
 			t.Fatalf("unexpected error: %s", err)
 		}
@@ -517,10 +532,10 @@ func TestStorageRunQuery(t *testing.T) {
 			t.Fatalf("unexpected result; got\n%v\nwant\n%v", results, resultsExpected)
 		}
 	})
-	t.Run("field_values-limit", func(t *testing.T) {
+	t.Run("field_values-limit-not-reached", func(t *testing.T) {
 		q := mustParseQuery("instance:='host-1:234'")
 		qctx := newTestQueryContext(allTenantIDs, q)
-		results, err := s.GetFieldValues(qctx, "_stream", 4)
+		results, err := s.GetFieldValues(qctx, "_stream", "", 4)
 		if err != nil {
 			t.Fatalf("unexpected error: %s", err)
 		}

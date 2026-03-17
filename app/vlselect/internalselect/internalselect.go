@@ -208,6 +208,7 @@ func processFieldValuesRequest(ctx context.Context, w http.ResponseWriter, r *ht
 	}
 
 	fieldName := r.FormValue("field")
+	filter := r.FormValue("filter")
 
 	limit, err := getInt64FromRequest(r, "limit")
 	if err != nil {
@@ -217,7 +218,7 @@ func processFieldValuesRequest(ctx context.Context, w http.ResponseWriter, r *ht
 	qctx := cp.NewQueryContext(ctx)
 	defer cp.UpdatePerQueryStatsMetrics()
 
-	fieldValues, err := vlstorage.GetFieldValues(qctx, fieldName, uint64(limit))
+	fieldValues, err := vlstorage.GetFieldValues(qctx, fieldName, filter, uint64(limit))
 	if err != nil {
 		return fmt.Errorf("cannot obtain field values: %w", err)
 	}

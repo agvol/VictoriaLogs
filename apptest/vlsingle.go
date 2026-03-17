@@ -3,11 +3,9 @@ package apptest
 import (
 	"fmt"
 	"net/http"
-	"os"
 	"regexp"
 	"strings"
 	"testing"
-	"time"
 
 	"github.com/VictoriaMetrics/VictoriaLogs/lib/logstorage"
 )
@@ -27,7 +25,7 @@ type Vlsingle struct {
 func MustStartVlsingle(t *testing.T, instance string, flags []string, cli *Client) *Vlsingle {
 	t.Helper()
 
-	storageDataPath := fmt.Sprintf("%s/%s-%d", os.TempDir(), instance, time.Now().UnixNano())
+	storageDataPath := fmt.Sprintf("%s/%s", t.Name(), instance)
 	flags = setDefaultFlags(flags, map[string]string{
 		"-storageDataPath": storageDataPath,
 		"-retentionPeriod": "100y",

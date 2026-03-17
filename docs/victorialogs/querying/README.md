@@ -1043,6 +1043,8 @@ Below is an example JSON output returned from this endpoint:
 }
 ```
 
+Pass `filter=substring` query arg to `/select/logsql/field_values` in order to return only the values containing the given `substring`.
+
 The `/select/logsql/field_values` endpoint supports optional `limit=N` query arg, which allows limiting the number of returned values to `N`.
 The endpoint returns arbitrary subset of values if their number exceeds `N`, so `limit=N` cannot be used for pagination over big number of field values.
 When the `limit` is reached, `hits` are zeroed, since they cannot be calculated reliably.

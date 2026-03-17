@@ -58,6 +58,7 @@ type FieldValuesOpts struct {
 	Start       string
 	End         string
 	Field       string
+	Filter      string
 	Limit       string
 	IgnorePipes string
 }
@@ -67,6 +68,7 @@ func (fos *FieldValuesOpts) asURLValues() url.Values {
 	addNonEmpty(uv, "start", fos.Start)
 	addNonEmpty(uv, "end", fos.End)
 	addNonEmpty(uv, "field", fos.Field)
+	addNonEmpty(uv, "filter", fos.Filter)
 	addNonEmpty(uv, "limit", fos.Limit)
 	addNonEmpty(uv, "ignore_pipes", fos.IgnorePipes)
 	return uv

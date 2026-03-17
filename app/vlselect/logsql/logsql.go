@@ -434,7 +434,7 @@ func ProcessFieldNamesRequest(ctx context.Context, w http.ResponseWriter, r *htt
 		return
 	}
 
-	// filter is used for filtering the returned field names
+	// Filter is used for filtering the returned field names by the given filter substring
 	filter := r.FormValue("filter")
 
 	qctx := ca.newQueryContext(ctx)
@@ -444,7 +444,7 @@ func ProcessFieldNamesRequest(ctx context.Context, w http.ResponseWriter, r *htt
 	startTime := time.Now()
 	fieldNames, err := vlstorage.GetFieldNames(qctx, filter)
 	if err != nil {
-		httpserver.Errorf(w, r, "cannot obtain field names: %s", err)
+		httpserver.Errorf(w, r, "cannot obtain field names with filter=%q: %s", filter, err)
 		return
 	}
 
@@ -475,6 +475,9 @@ func ProcessFieldValuesRequest(ctx context.Context, w http.ResponseWriter, r *ht
 		return
 	}
 
+	// Filter is used for filtering the returned field values by the given filter substring
+	filter := r.FormValue("filter")
+
 	// Parse limit query arg
 	limit, err := getPositiveInt(r, "limit")
 	if err != nil {
@@ -487,9 +490,9 @@ func ProcessFieldValuesRequest(ctx context.Context, w http.ResponseWriter, r *ht
 
 	// Obtain unique values for the given field
 	startTime := time.Now()
-	values, err := vlstorage.GetFieldValues(qctx, fieldName, uint64(limit))
+	values, err := vlstorage.GetFieldValues(qctx, fieldName, filter, uint64(limit))
 	if err != nil {
-		httpserver.Errorf(w, r, "cannot obtain values for field %q: %s", fieldName, err)
+		httpserver.Errorf(w, r, "cannot obtain values for field %q with filter %q: %s", fieldName, filter, err)
 		return
 	}
 
