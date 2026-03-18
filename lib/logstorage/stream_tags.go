@@ -265,3 +265,37 @@ func unmarshalTagValue(dst, src []byte) ([]byte, []byte, error) {
 		b = b[1:]
 	}
 }
+
+// CheckStreamFieldNames returns non-nil error if names contain prohibited chars, which cannot be used in stream field names.
+func CheckStreamFieldNames(names []string) error {
+	for _, name := range names {
+		if err := CheckStreamFieldName(name); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// CheckStreamFieldName returns non-nil error if the name contain prohibited chars, which cannot be used in stream field names.
+func CheckStreamFieldName(name string) error {
+	// Do not use strings.ContainsAny because it is slower than two calls to strings.IndexByte()
+	// TODO: replace this to strings.ContainsAny() when it will be optimized in Go standard library.
+	// See BenchmarkCheckStreamFieldNames.
+
+	if strings.IndexByte(name, '=') >= 0 {
+		// The '=' cannot be located in stream field name, since it prevents from the proper parsing
+		// when such a name is put inside _stream value.
+		// For example:
+		// - 'foo=bar' name cannot be parsed reliably in _stream={foo=bar="baz"}
+		return fmt.Errorf("the %q cannot contain '=' char", name)
+	}
+	if strings.IndexByte(name, '}') >= 0 {
+		// The '}' cannot be located in stream field name, since it prevents from the proper parsing
+		// when such a name is put inside _stream value.
+		// For example:
+		// - 'foo}bar' name cannot be parsed reliably in _stream={foo}bar="baz"}
+		return fmt.Errorf("the %q cannot contain '}' char", name)
+	}
+
+	return nil
+}

@@ -358,6 +358,13 @@ func (lr *LogRows) MustAdd(tenantID TenantID, timestamp int64, fields []Field, s
 		// Compose StreamTags from fields[:streamFieldsLen] and ignore lr.streamFields with lr.extraStreamFields.
 		for _, f := range fields[:streamFieldsLen] {
 			fieldName := getCanonicalFieldName(f.Name)
+
+			if err := CheckStreamFieldName(fieldName); err != nil {
+				line := MarshalFieldsToJSON(nil, fields)
+				invalidStreamTagsLogger.Warnf("invalid stream field name %q: %s; skipping the log entry; log entry: %s", fieldName, err, line)
+				return
+			}
+
 			if !lr.ignoreFields.MatchString(fieldName) {
 				st.Add(fieldName, f.Value)
 			}
